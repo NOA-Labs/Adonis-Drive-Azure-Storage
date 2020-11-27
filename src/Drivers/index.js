@@ -93,12 +93,37 @@ class AzureStorage {
     })
   }
 
-  put (relativePath, content) {
+  put (
+    relativePath,
+    content,
+    {
+      maxConcurrency,
+      tier,
+      cacheControl,
+      contentType,
+      contentLanguage,
+      contentDisposition,
+      conditions,
+      tags,
+      metadata
+    } = {}
+  ) {
     const blockBlobClient = this.getBlockBlobClient(relativePath)
+    const blobHTTPHeaders = {}
+    const options = { blobHTTPHeaders }
+
+    if (tier) options.tier = tier
+    if (conditions) options.conditions = conditions
+    if (tags) options.tags = tags
+    if (metadata) options.metadata = metadata
+    if (cacheControl) blobHTTPHeaders.blobCacheControl = cacheControl
+    if (contentDisposition) blobHTTPHeaders.blobContentDisposition = contentDisposition
+    if (contentType) blobHTTPHeaders.blobContentType = contentType
+    if (contentLanguage) blobHTTPHeaders.blobContentLanguage = contentLanguage
 
     return new Promise((resolve, reject) => {
       try {
-        blockBlobClient.upload(content, content.length).then(response => {
+        blockBlobClient.upload(content, content.length, maxConcurrency, options).then(response => {
           resolve(response)
         })
       } catch (err) {
@@ -107,12 +132,37 @@ class AzureStorage {
     })
   }
 
-  putStream (relativePath, content) {
+  putStream (
+    relativePath,
+    content,
+    {
+      maxConcurrency,
+      tier,
+      cacheControl,
+      contentType,
+      contentLanguage,
+      contentDisposition,
+      conditions,
+      tags,
+      metadata
+    } = {}
+  ) {
     const blockBlobClient = this.getBlockBlobClient(relativePath)
+    const blobHTTPHeaders = {}
+    const options = { blobHTTPHeaders }
+
+    if (tier) options.tier = tier
+    if (conditions) options.conditions = conditions
+    if (tags) options.tags = tags
+    if (metadata) options.metadata = metadata
+    if (cacheControl) blobHTTPHeaders.blobCacheControl = cacheControl
+    if (contentDisposition) blobHTTPHeaders.blobContentDisposition = contentDisposition
+    if (contentType) blobHTTPHeaders.blobContentType = contentType
+    if (contentLanguage) blobHTTPHeaders.blobContentLanguage = contentLanguage
 
     return new Promise((resolve, reject) => {
       try {
-        blockBlobClient.uploadStream(content, content.length).then(response => {
+        blockBlobClient.uploadStream(content, content.length, maxConcurrency, options).then(response => {
           resolve(response)
         })
       } catch (err) {

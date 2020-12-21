@@ -19,6 +19,7 @@ jobs:
       - run: azurite-blob --silent --debug debug.log &
       - run: npm ci
       - run: npm test
+
   publish-npm:
     needs: build
     runs-on: ubuntu-latest
